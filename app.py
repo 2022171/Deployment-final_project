@@ -17,6 +17,9 @@ st.set_page_config(
 
 model = joblib.load("model.pkl")
 
+encoders = joblib.load("encoders.pkl")
+
+
 # BACKGROUND IMAGE
 def get_base64(file):
     with open(file, "rb") as f:
@@ -102,6 +105,8 @@ if "loaded" not in st.session_state:
 
 # INPUT
 
+# INPUT
+
 col1, col2 = st.columns(2)
 
 with col1:
@@ -111,40 +116,47 @@ with col1:
         value=st.session_state.year
     )
 
-    state_of_production = st.number_input(
+    selected_state = st.selectbox(
         "State of Production",
-        value=st.session_state.state_of_production
+        encoders["state_of_production"].classes_
     )
+    state_of_production = encoders["state_of_production"].transform([selected_state])[0]
 
-    municipality_of_production = st.number_input(
+    selected_municipality = st.selectbox(
         "Municipality of Production",
-        value=st.session_state.municipality_of_production
+        encoders["municipality_of_production"].classes_
     )
+    municipality_of_production = encoders["municipality_of_production"].transform([selected_municipality])[0]
 
-    logistics_hub = st.number_input(
+    selected_logistics_hub = st.selectbox(
         "Logistics Hub",
-        value=st.session_state.logistics_hub
+        encoders["logistics_hub"].classes_
     )
+    logistics_hub = encoders["logistics_hub"].transform([selected_logistics_hub])[0]
 
-    product_type = st.number_input(
+    selected_product_type = st.selectbox(
         "Product Type",
-        value=st.session_state.product_type
+        encoders["product_type"].classes_
     )
+    product_type = encoders["product_type"].transform([selected_product_type])[0]
 
-    port_of_export = st.number_input(
+    selected_port = st.selectbox(
         "Port of Export",
-        value=st.session_state.port_of_export
+        encoders["port_of_export"].classes_
     )
+    port_of_export = encoders["port_of_export"].transform([selected_port])[0]
 
-    exporter = st.number_input(
+    selected_exporter = st.selectbox(
         "Exporter",
-        value=st.session_state.exporter
+        encoders["exporter"].classes_
     )
+    exporter = encoders["exporter"].transform([selected_exporter])[0]
 
-    exporter_group = st.number_input(
+    selected_exporter_group = st.selectbox(
         "Exporter Group",
-        value=st.session_state.exporter_group
+        encoders["exporter_group"].classes_
     )
+    exporter_group = encoders["exporter_group"].transform([selected_exporter_group])[0]
 
     zero_deforestation_brazil_beef = st.selectbox(
         "Zero Deforestation Brazil Beef",
@@ -160,20 +172,23 @@ with col2:
         index=st.session_state.forest_500_beef
     )
 
-    importer = st.number_input(
+    selected_importer = st.selectbox(
         "Importer",
-        value=st.session_state.importer
+        encoders["importer"].classes_
     )
+    importer = encoders["importer"].transform([selected_importer])[0]
 
-    country_of_destination = st.number_input(
+    selected_country = st.selectbox(
         "Country of Destination",
-        value=st.session_state.country_of_destination
+        encoders["country_of_destination"].classes_
     )
+    country_of_destination = encoders["country_of_destination"].transform([selected_country])[0]
 
-    economic_bloc = st.number_input(
+    selected_economic_bloc = st.selectbox(
         "Economic Bloc",
-        value=st.session_state.economic_bloc
+        encoders["economic_bloc"].classes_
     )
+    economic_bloc = encoders["economic_bloc"].transform([selected_economic_bloc])[0]
 
     country_of_destination_trase_id = st.number_input(
         "Country Destination Trase ID",
@@ -205,9 +220,9 @@ with col2:
         value=st.session_state.fob
     )
 
-# -----------------------------
+
 # PREDICTION
-# -----------------------------
+
 if st.button("Predict CO₂"):
 
     features = np.array([[
@@ -224,7 +239,6 @@ if st.button("Predict CO₂"):
         importer,
         country_of_destination,
         economic_bloc,
-        country_of_destination_trase_id,
         cattle_deforestation_5_year_total_exposure,
         co2_net_emissions_cattle_deforestation_5_year_total_exposure,
         land_use,
