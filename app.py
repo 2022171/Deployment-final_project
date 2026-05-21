@@ -65,16 +65,16 @@ h1, h2, h3, p, label {{
 
 st.markdown(page_bg, unsafe_allow_html=True)
 
-# -----------------------------
+
 # TITLE
-# -----------------------------
+
 st.title("CO₂ Emissions Prediction App")
 
 st.write("Helping protect the Amazon Rainforest")
 
-# -----------------------------
+
 # RANDOM DEFAULT VALUES
-# -----------------------------
+
 if "loaded" not in st.session_state:
 
     st.session_state.year = random.randint(2010, 2025)
